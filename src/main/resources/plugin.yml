@@ -24,3 +24,13 @@ commands:
     usage: "/setcoinpersecond <coin: int>"
     permission: op
     permission-message: "§c你没有权限执行此操作。"
+  rrt:
+    description: "瞬间减少游戏时间。addCoin 默认为 true 。当 addCoin 为 true 时，会在减少游戏时间的同时给所有存活玩家增加这段时间所应该增加的B币。"
+    usage: "/rrt <time: int> [addCoin: boolean]"
+    permission: op
+    permission-message: "§c你没有权限执行此操作。"
+  forceout:
+    description: "强制淘汰一个玩家。"
+    usage: "/forceout <player>"
+    permission: op
+    permission-message: "§c你没有权限执行此操作。"

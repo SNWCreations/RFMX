@@ -5,18 +5,18 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import snw.rfmx.commands.ClearCoinCommand;
-import snw.rfmx.commands.HunterNoMoveCommand;
-import snw.rfmx.commands.SetCoinPerSecondCommand;
 
 public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-        registerCommand("clearcoin", new ClearCoinCommand());
-        registerCommand("hunternomove", new HunterNoMoveCommand());
-        registerCommand("setcoinpersecond", new SetCoinPerSecondCommand());
+        InGameCommandHandler igch = new InGameCommandHandler();
+
+        registerCommand("clearcoin", igch);
+        registerCommand("hunternomove", igch);
+        registerCommand("setcoinpersecond", igch);
+        registerCommand("rrt", igch);
     }
 
     @Override
@@ -31,9 +31,6 @@ public final class Main extends JavaPlugin {
             throw new NullPointerException();
         } else {
             cmd.setExecutor(executor);
-            if (executor instanceof TabCompleter) {
-                cmd.setTabCompleter((TabCompleter) executor);
-            }
         }
     }
 }
