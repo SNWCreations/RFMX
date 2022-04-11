@@ -6,4 +6,6 @@
 
 适用版本: Minecraft 1.16.X
 
-RFM API 版本: v1.3.4
+RFM API 版本: v1.5.1
+
+特别感谢: CommandAPI by JorelAli
