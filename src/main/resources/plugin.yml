@@ -4,6 +4,7 @@ main: snw.rfmx.Main
 api-version: 1.16
 
 depend:
+  - CommandAPI
   - RunForMoney
 loadbefore:
   - RunForMoney

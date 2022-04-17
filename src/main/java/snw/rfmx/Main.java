@@ -8,14 +8,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.*;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.GameController;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public final class Main extends JavaPlugin {
 
@@ -54,9 +54,43 @@ public final class Main extends JavaPlugin {
                 .executes((sender, args) -> {
                     GameController controller = RunForMoney.getInstance().getGameController();
                     if (controller != null) {
-                        controller.forceOut((Player) args[0]);
                         Bukkit.broadcastMessage(ChatColor.RED + ((Player) args[0])
                                 .getName() + (((String) args[1]).equalsIgnoreCase("forceout") ? " 被强制淘汰。" : " 已弃权。"));
+                        controller.forceOut((Player) args[0]);
+                        sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "操作失败。游戏并未运行。");
+                    }
+                }).register();
+
+        new CommandAPICommand("forceout")
+                .withPermission(CommandPermission.OP)
+                .withArguments(new EntitySelectorArgument("player", EntitySelectorArgument.EntitySelector.ONE_PLAYER))
+                .executes((sender, args) -> {
+                    GameController controller = RunForMoney.getInstance().getGameController();
+                    if (controller != null) {
+                        Bukkit.broadcastMessage(ChatColor.RED + ((Player) args[0])
+                                .getName() + "被强制淘汰。");
+                        controller.forceOut((Player) args[0]);
+                        sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "操作失败。游戏并未运行。");
+                    }
+                }).register();
+                
+        new CommandAPICommand("forceout")
+                .withPermission(CommandPermission.OP)
+                .withArguments(new EntitySelectorArgument("player", EntitySelectorArgument.EntitySelector.MANY_PLAYERS))
+                .executes((sender, args) -> {
+                    GameController controller = RunForMoney.getInstance().getGameController();
+                    if (controller != null) {
+                        @SuppressWarnings("unchecked")
+                        Collection<Player> players = (Collection<Player>) args[0];
+                        List<String> playerNames = new ArrayList<>();
+                        players.stream().map(HumanEntity::getName).forEach(playerNames::add);
+                        Bukkit.broadcastMessage(ChatColor.RED + String.join(", ", playerNames)
+                                + "被强制淘汰。");
+                        controller.forceOut((Player) args[0]);
                         sender.sendMessage(ChatColor.GREEN + "操作成功。");
                     } else {
                         sender.sendMessage(ChatColor.RED + "操作失败。游戏并未运行。");
@@ -93,6 +127,7 @@ public final class Main extends JavaPlugin {
                         }
                     }
                 })).register();
+
         new CommandAPICommand("addmoney")
                 .withPermission(CommandPermission.OP)
                 .withArguments(new PlayerArgument("player"))
@@ -106,6 +141,7 @@ public final class Main extends JavaPlugin {
                         sender.sendMessage(ChatColor.RED + "操作失败。游戏并未运行。");
                     }
                 })).register();
+
         new CommandAPICommand("rrt")
                 .withPermission(CommandPermission.OP)
                 .withArguments(new IntegerArgument("time", 1))
@@ -114,6 +150,19 @@ public final class Main extends JavaPlugin {
                     GameController controller = RunForMoney.getInstance().getGameController();
                     if (controller != null) {
                         RunForMoney.getInstance().getGameController().removeRemainingTime((int) args[0], (boolean) args[1]);
+                        sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "操作失败。游戏并未运行。");
+                    }
+                })).register();
+
+        new CommandAPICommand("rrt")
+                .withPermission(CommandPermission.OP)
+                .withArguments(new IntegerArgument("time", 1))
+                .executes(((sender, args) -> {
+                    GameController controller = RunForMoney.getInstance().getGameController();
+                    if (controller != null) {
+                        RunForMoney.getInstance().getGameController().removeRemainingTime((int) args[0], true);
                         sender.sendMessage(ChatColor.GREEN + "操作成功。");
                     } else {
                         sender.sendMessage(ChatColor.RED + "操作失败。游戏并未运行。");
