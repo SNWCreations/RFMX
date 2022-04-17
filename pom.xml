@@ -12,7 +12,7 @@
     <name>RFM eXtended</name>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -62,10 +62,6 @@
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
         <repository>
-            <id>snw-personal-repo</id>
-            <url>https://ghproxy.com/https://raw.githubusercontent.com/SNWCreations/mvn-repo/main/</url>
-        </repository>
-        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
@@ -79,9 +75,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>snw</groupId>
-            <artifactId>rfm-api</artifactId>
-            <version>1.5.0</version>
+            <groupId>com.github.SNWCreations</groupId>
+            <artifactId>RunForMoneyAPI</artifactId>
+            <version>v1.5.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

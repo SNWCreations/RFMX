@@ -6,16 +6,14 @@ import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.GameController;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public final class Main extends JavaPlugin {
 
@@ -86,9 +84,7 @@ public final class Main extends JavaPlugin {
                     if (controller != null) {
                         @SuppressWarnings("unchecked")
                         Collection<Player> players = (Collection<Player>) args[0];
-                        List<String> playerNames = new ArrayList<>();
-                        players.stream().map(HumanEntity::getName).forEach(playerNames::add);
-                        Bukkit.broadcastMessage(ChatColor.RED + String.join(", ", playerNames)
+                        Bukkit.broadcastMessage(ChatColor.RED + players.stream().map(HumanEntity::getName).collect(Collectors.joining(", "))
                                 + "被强制淘汰。");
                         controller.forceOut((Player) args[0]);
                         sender.sendMessage(ChatColor.GREEN + "操作成功。");
