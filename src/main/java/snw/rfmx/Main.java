@@ -6,13 +6,16 @@ import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.GameController;
 
+import java.io.File;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class Main extends JavaPlugin {
@@ -48,13 +51,52 @@ public final class Main extends JavaPlugin {
         new CommandAPICommand("forceout")
                 .withPermission(CommandPermission.OP)
                 .withArguments(new EntitySelectorArgument("player", EntitySelectorArgument.EntitySelector.ONE_PLAYER))
-                .withArguments(new MultiLiteralArgument("forceout", "exit"))
+                .withArguments(new MultiLiteralArgument("forceout", "exit", "respawn"))
                 .executes((sender, args) -> {
                     GameController controller = RunForMoney.getInstance().getGameController();
                     if (controller != null) {
-                        Bukkit.broadcastMessage(ChatColor.RED + ((Player) args[0])
-                                .getName() + (((String) args[1]).equalsIgnoreCase("forceout") ? " 被强制淘汰。" : " 已弃权。"));
-                        controller.forceOut((Player) args[0]);
+                        Player player = (Player) args[0];
+                        String type = (String) args[1];
+                        String text = switch (type) {
+                            case "exit" -> " 已弃权。";
+                            case "respawn" -> " 复活成功。";
+                            default -> " 被强制淘汰。";
+                        };
+                        text = ((Objects.equals(type, "respawn") ? ChatColor.GREEN : ChatColor.RED) +
+                                (YamlConfiguration.loadConfiguration(new File(RunForMoney.getInstance().getDataFolder(), "nickname.yml"))
+                                        .getString(player.getName(), player.getName()) // another method for access nick support
+                                        + text));
+
+                        controller.forceOut(player);
+                        Bukkit.broadcastMessage(text);
+                        sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "操作失败。游戏并未运行。");
+                    }
+                }).register();
+
+        new CommandAPICommand("forceout")
+                .withPermission(CommandPermission.OP)
+                .withArguments(new EntitySelectorArgument("player", EntitySelectorArgument.EntitySelector.MANY_PLAYERS))
+                .withArguments(new MultiLiteralArgument("forceout", "exit", "respawn"))
+                .executes((sender, args) -> {
+                    GameController controller = RunForMoney.getInstance().getGameController();
+                    if (controller != null) {
+                        Player player = (Player) args[0];
+                        String type = (String) args[1];
+                        String text = switch (type) {
+                            case "exit" -> " 已弃权。";
+                            case "respawn" -> " 复活成功。";
+                            default -> " 被强制淘汰。";
+                        };
+                        text = ((Objects.equals(type, "respawn") ? ChatColor.GREEN : ChatColor.RED) +
+                                (YamlConfiguration.loadConfiguration(new File(RunForMoney.getInstance().getDataFolder(), "nickname.yml"))
+                                        .getString(player.getName(), player.getName())  // another way to access
+                                                                                        // nickname support
+                                        + text));
+
+                        controller.forceOut(player);
+                        Bukkit.broadcastMessage(text);
                         sender.sendMessage(ChatColor.GREEN + "操作成功。");
                     } else {
                         sender.sendMessage(ChatColor.RED + "操作失败。游戏并未运行。");

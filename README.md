@@ -8,4 +8,6 @@
 
 RFM API 版本: v1.5.1
 
+**需要 Java 16 来运行此插件。**
+
 特别感谢: CommandAPI by JorelAli
