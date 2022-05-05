@@ -6,7 +6,7 @@
 
     <groupId>snw</groupId>
     <artifactId>rfmx</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <packaging>jar</packaging>
 
     <name>RFM eXtended</name>
@@ -89,7 +89,7 @@
         <dependency>
             <groupId>dev.jorel.CommandAPI</groupId>
             <artifactId>commandapi-core</artifactId>
-            <version>6.5.4</version>
+            <version>7.0.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
