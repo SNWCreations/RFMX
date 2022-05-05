@@ -12,10 +12,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.GameController;
+import snw.rfm.game.TeamHolder;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class Main extends JavaPlugin {
@@ -206,6 +206,13 @@ public final class Main extends JavaPlugin {
                         sender.sendMessage(ChatColor.RED + "操作失败。游戏并未运行。");
                     }
                 })).register();
+        new CommandAPICommand("rfmrandom")
+                .withPermission(CommandPermission.OP)
+                .executes((sender, args) -> {
+                    List<String> r = new ArrayList<>(TeamHolder.getInstance().getRunners());
+                    String result = r.get(new Random().nextInt(r.size() - 1));
+                    sender.sendMessage(result);
+                }).register();
     }
 
     @Override
