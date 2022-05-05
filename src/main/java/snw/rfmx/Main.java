@@ -29,7 +29,7 @@ public final class Main extends JavaPlugin {
                 .executes(((sender, args) -> {
                     GameController controller = RunForMoney.getInstance().getGameController();
                     if (controller != null) {
-                        controller.setCoinPerSecond(controller.getCoinPerSecond());
+                        controller.setCoinPerSecond(-controller.getCoinPerSecond());
                         sender.sendMessage(ChatColor.GREEN + "操作成功。");
                     } else {
                         sender.sendMessage(ChatColor.RED + "操作失败。游戏并未运行。");
